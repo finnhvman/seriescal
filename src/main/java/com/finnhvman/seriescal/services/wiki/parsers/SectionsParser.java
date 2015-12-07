@@ -3,6 +3,7 @@ package com.finnhvman.seriescal.services.wiki.parsers;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.*;
 
 import static com.finnhvman.seriescal.services.wiki.parsers.constants.ParserTokens.*;
@@ -10,7 +11,7 @@ import static com.finnhvman.seriescal.services.wiki.parsers.constants.ParserToke
 @Component
 public class SectionsParser {
 
-    public Integer extractSectionNumber(JsonNode sections, String seasonNumber) {
+    public Integer extractSectionNumber(JsonNode sections, String seasonNumber) throws ParseException {
         Map<String, Integer> sectionsList = extractSectionsList(sections);
         for (Map.Entry<String, Integer> section : sectionsList.entrySet()) {
             if (matchNumberedSection(section.getKey(), seasonNumber)) {
@@ -22,7 +23,7 @@ public class SectionsParser {
                 return section.getValue();
             }
         }
-        return -1;
+        throw new ParseException("Section not found.", 0);
     }
 
     private Map<String, Integer>  extractSectionsList(JsonNode sections) {
@@ -41,13 +42,8 @@ public class SectionsParser {
     }
 
     private boolean matchNumberedSection(String section, String seasonNumber) {
-        if (section.matches(SERIES + SPACE + seasonNumber + ANY_CHARACTER_REGEX)) {
-            return true;
-        } else if (section.matches(SEASON + SPACE + seasonNumber + ANY_CHARACTER_REGEX)) {
-            return true;
-        } else {
-            return false;
-        }
+        return section.matches(SERIES + SPACE + seasonNumber + ANY_CHARACTER_REGEX)
+                || section.matches(SEASON + SPACE + seasonNumber + ANY_CHARACTER_REGEX);
     }
 
 }

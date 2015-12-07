@@ -56,7 +56,7 @@ public class SeasonWikiRestService implements SeasonWikiService {
         } catch (InterruptedException e) {
             // TODO should not do anything
         } catch (ParseException e) {
-            // TODO revisit this
+            // TODO somehow notify about the fault
         } finally {
             seasonsBeingQueried.clear();
         }
@@ -125,14 +125,19 @@ public class SeasonWikiRestService implements SeasonWikiService {
             if (Thread.interrupted()) {
                 break;
             }
-            SeasonUpdate seasonUpdate = collectSeasonUpdate(seasonEntity);
+            SeasonUpdate seasonUpdate = null;
+            try {
+                seasonUpdate = collectSeasonUpdate(seasonEntity);
+            } catch (ParseException e) {
+                e.printStackTrace(); // TODO somehow note the fault, also catch unchecked exceptions?
+            }
             if (seasonUpdate != null) {
                 seasonUpdatesCache.add(seasonUpdate);
             }
         }
     }
 
-    private SeasonUpdate collectSeasonUpdate(SeasonEntity seasonEntity) {
+    private SeasonUpdate collectSeasonUpdate(SeasonEntity seasonEntity) throws ParseException {
         try {
             if (seasonEntity.getSection() < 0) {
                 seasonEntity.setSection(getSectionIndex(seasonEntity));
@@ -143,21 +148,12 @@ public class SeasonWikiRestService implements SeasonWikiService {
         } finally {
             seasonCrudRepository.save(seasonEntity);
         }
-        try {
-            return getSeasonUpdate(seasonEntity);
-        } catch (ParseException e) {
-            return null;
-        }
+        return getSeasonUpdate(seasonEntity);
     }
 
-    private int getSectionIndex(SeasonEntity seasonEntity) {
+    private int getSectionIndex(SeasonEntity seasonEntity) throws ParseException {
         JsonNode sections = wikiRestTemplate.parseSections(seasonEntity.getPage());
-        String seasonNumber = null;
-        try {
-            seasonNumber = parserFacade.extractSeasonNumber(seasonEntity.getWikiUrl());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String seasonNumber = parserFacade.extractSeasonNumber(seasonEntity.getWikiUrl());
         int sectionNumber = parserFacade.extractSectionNumber(sections, seasonNumber);
         seasonEntity.setSection(sectionNumber);
         return sectionNumber;

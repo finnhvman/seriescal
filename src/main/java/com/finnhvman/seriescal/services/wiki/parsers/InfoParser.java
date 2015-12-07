@@ -21,7 +21,7 @@ public class InfoParser {
 
     private DateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
 
-    public Map<String, Long> extractTouchedTimes(JsonNode info) {
+    public Map<String, Long> extractTouchedTimes(JsonNode info) throws ParseException {
         Map<String, String> normalizedMap = extractNormalizedMap(info);
         Map<String, Long> touchedMap = extractTouchedMap(info);
         return normalizedMap.keySet().parallelStream()
@@ -45,13 +45,13 @@ public class InfoParser {
         return normalizedMap;
     }
 
-    private Map<String, Long> extractTouchedMap(JsonNode info) {
+    private Map<String, Long> extractTouchedMap(JsonNode info) throws ParseException {
         JsonNode queryNode = info.get(QUERY);
         JsonNode normalizedNode = queryNode.get(PAGES);
         return collectTouched(normalizedNode.iterator());
     }
 
-    private Map<String, Long> collectTouched(Iterator<JsonNode> iterator) {
+    private Map<String, Long> collectTouched(Iterator<JsonNode> iterator) throws ParseException {
         Map<String, Long> touchedMap = new HashMap<>();
         while (iterator.hasNext()) {
             JsonNode element = iterator.next();
@@ -63,13 +63,8 @@ public class InfoParser {
         return touchedMap;
     }
 
-    private long parseTouchedTime(String formattedDate) {
-        Date date = null;
-        try {
-            date = dateFormat.parse(formattedDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    private long parseTouchedTime(String formattedDate) throws ParseException {
+        Date date = dateFormat.parse(formattedDate);
         return date.getTime();
     }
 

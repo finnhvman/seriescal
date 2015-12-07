@@ -23,11 +23,11 @@ public class ParserFacade {
     @Autowired
     private UrlParser urlParser;
 
-    public Map<String, Long> extractTouchedTimes(JsonNode info)  {
+    public Map<String, Long> extractTouchedTimes(JsonNode info) throws ParseException {
         return infoParser.extractTouchedTimes(info);
     }
 
-    public Integer extractSectionNumber(JsonNode info, String seasonNumber) {
+    public Integer extractSectionNumber(JsonNode info, String seasonNumber) throws ParseException {
         return sectionsParser.extractSectionNumber(info, seasonNumber);
     }
 

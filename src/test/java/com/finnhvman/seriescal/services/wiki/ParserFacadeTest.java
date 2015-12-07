@@ -36,14 +36,14 @@ public class ParserFacadeTest {
     }
 
     @Test
-    public void testExtractTouchedTimes() {
+    public void testExtractTouchedTimes() throws Exception {
         underTest.extractTouchedTimes(mockJson);
 
         Mockito.verify(infoParser).extractTouchedTimes(mockJson);
     }
 
     @Test
-    public void testExtractSectionNumber() {
+    public void testExtractSectionNumber() throws Exception {
         underTest.extractSectionNumber(mockJson, "1");
 
         Mockito.verify(sectionsParser).extractSectionNumber(mockJson, "1");

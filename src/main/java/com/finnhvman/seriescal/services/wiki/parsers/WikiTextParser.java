@@ -37,7 +37,7 @@ public class WikiTextParser {
         return asteriskNode.asText();
     }
 
-    private Integer extractEpisodeNumber(String episodeBlock) {
+    private Integer extractEpisodeNumber(String episodeBlock) throws ParseException {
         String[] episodeData = episodeBlock.split(ANY_WHITESPACE_CAHARCTER + Pattern.quote(PIPE));
         for (String data : episodeData) {
             if (data.contains(EPISODE_NUMBER_2)) {
@@ -51,7 +51,7 @@ public class WikiTextParser {
                 return extendedValueOf(episodeNumber);
             }
         }
-        return null;
+        throw new ParseException("Could not parse Episode Number.", 0);
     }
 
     private Integer extendedValueOf(String number) {
@@ -62,7 +62,7 @@ public class WikiTextParser {
         }
     }
 
-    private Date extractEpisodeDate(String episodeBlock) {
+    private Date extractEpisodeDate(String episodeBlock) throws ParseException {
         String[] episodeData = episodeBlock.split(ANY_WHITESPACE_CAHARCTER + Pattern.quote(PIPE));
         for (String data : episodeData) {
             if (data.contains(ORIGINAL_AIR_DATE)) {
@@ -73,7 +73,7 @@ public class WikiTextParser {
                 return new Date(year, month, day);
             }
         }
-        return null;
+        throw new ParseException("Could not parse Original Air Date.", 0);
     }
 
 }

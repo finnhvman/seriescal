@@ -7,10 +7,18 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 
 public class SectionsParserTest {
 
     private SectionsParser underTest = new SectionsParser();
+
+    @Test(expected = ParseException.class)
+    public void testExtractSectionNumberOnEmptySections() throws Exception {
+        JsonNode sections = readJson("EmptySections.json");
+
+        underTest.extractSectionNumber(sections, "0");
+    }
 
     @Test
     public void testExtractSectionNumberOnBobsBurgersSeason6() throws Exception {
