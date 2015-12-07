@@ -1,11 +1,17 @@
 package com.finnhvman.seriescal.model;
 
-// TODO full implementation
-
 public class Episode {
 
     private Integer number;
     private Boolean enqueued;
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 
     public Boolean getEnqueued() {
         return enqueued;
@@ -15,12 +21,5 @@ public class Episode {
         this.enqueued = enqueued;
     }
 
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
 }
 

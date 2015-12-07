@@ -16,7 +16,6 @@ public class SeasonUpdate {
         this.id = id;
     }
 
-
     public List<Integer> getNewEpisodes() {
         return newEpisodes;
     }
@@ -32,4 +31,5 @@ public class SeasonUpdate {
     public void setTitle(String title) {
         this.title = title;
     }
+
 }

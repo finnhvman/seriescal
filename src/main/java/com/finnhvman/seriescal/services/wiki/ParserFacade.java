@@ -1,18 +1,18 @@
 package com.finnhvman.seriescal.services.wiki;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.finnhvman.seriescal.services.wiki.parsers.*;
+import com.finnhvman.seriescal.services.wiki.parsers.InfoParser;
+import com.finnhvman.seriescal.services.wiki.parsers.SectionsParser;
+import com.finnhvman.seriescal.services.wiki.parsers.UrlParser;
+import com.finnhvman.seriescal.services.wiki.parsers.WikiTextParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.Map;
 
 @Component
 public class ParserFacade {
-
-    // TODO HANDLE ALL ERRORS, maybe use ParseException everywhere
 
     @Autowired
     private InfoParser infoParser;
@@ -31,7 +31,7 @@ public class ParserFacade {
         return sectionsParser.extractSectionNumber(info, seasonNumber);
     }
 
-    public Map<Integer, Date> extractEpisodeDates(JsonNode wikiSection) throws ParseException {
+    public Map<Integer, Integer> extractEpisodeDates(JsonNode wikiSection) throws ParseException {
         return wikiTextParser.extractEpisodeDates(wikiSection);
     }
 

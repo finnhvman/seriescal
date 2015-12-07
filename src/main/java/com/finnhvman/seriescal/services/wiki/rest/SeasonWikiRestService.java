@@ -3,6 +3,7 @@ package com.finnhvman.seriescal.services.wiki.rest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.finnhvman.seriescal.model.SeasonUpdate;
 import com.finnhvman.seriescal.repository.SeasonCrudRepository;
+import com.finnhvman.seriescal.services.store.EpisodeStoreService;
 import com.finnhvman.seriescal.services.store.jpa.entities.SeasonEntity;
 import com.finnhvman.seriescal.services.wiki.ParserFacade;
 import com.finnhvman.seriescal.services.wiki.SeasonWikiService;
@@ -21,7 +22,9 @@ public class SeasonWikiRestService implements SeasonWikiService {
     @Autowired
     private ParserFacade parserFacade;
     @Autowired
-    private SeasonCrudRepository seasonCrudRepository;
+    private SeasonCrudRepository seasonCrudRepository; // TODO replace with SeasonStoreService, preferably do not use SeasonEntity
+    @Autowired
+    private EpisodeStoreService episodeStoreService;
     @Autowired
     private WikiRestTemplate wikiRestTemplate;
 
@@ -51,8 +54,8 @@ public class SeasonWikiRestService implements SeasonWikiService {
         try {
             seasonsBeingQueried = new ArrayList<>(seasonIds);
             invalidateCache(seasonIds);
-            List<SeasonEntity> touchedSeasons = getTouchedSeasons(seasonIds);
-            startCollectorThread(() -> collectSeasonUpdates(touchedSeasons));
+            List<Long> touchedSeasonIds = getTouchedSeasonIds(seasonIds);
+            startCollectorThread(() -> collectSeasonUpdates(seasonIds, touchedSeasonIds));
         } catch (InterruptedException e) {
             // TODO should not do anything
         } catch (ParseException e) {
@@ -72,11 +75,11 @@ public class SeasonWikiRestService implements SeasonWikiService {
         }
     }
 
-    private List<SeasonEntity> getTouchedSeasons(List<Long> seasonIds) throws ParseException {
+    private List<Long> getTouchedSeasonIds(List<Long> seasonIds) throws ParseException {
         List<String> pages = getSeasonPages(seasonIds);
         String pipedPages = pipePages(pages);
         JsonNode seasonsInfo = wikiRestTemplate.queryInfo(pipedPages);
-        return filterTouchedSeasons(seasonsInfo);
+        return filterTouchedSeasonIds(seasonsInfo);
     }
 
     private List<String> getSeasonPages(List<Long> seasonIds) {
@@ -95,20 +98,21 @@ public class SeasonWikiRestService implements SeasonWikiService {
         return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 
-    private List<SeasonEntity> filterTouchedSeasons(JsonNode touchedInfo) throws ParseException {
+    private List<Long> filterTouchedSeasonIds(JsonNode touchedInfo) throws ParseException {
         Map<String, Long> touchedTimes = parserFacade.extractTouchedTimes(touchedInfo);
 
-        List<SeasonEntity> touchedSeasonEntities = new ArrayList<>(); // TODO maybe there is a lambda solution
+        List<Long> touchedSeasonIds = new ArrayList<>(); // TODO maybe there is a lambda solution
         for (Map.Entry<String, Long> entry : touchedTimes.entrySet()) {
-            List<SeasonEntity> seasonEntities = seasonCrudRepository.findByPage(entry.getKey());
-            seasonEntities.parallelStream().
+            List<SeasonEntity> seasonEntities = seasonCrudRepository.findByPage(entry.getKey()); // TODO this should be optimized
+            seasonEntities.stream().
                     filter(seasonEntity -> seasonEntity.getTouched() < entry.getValue())
                     .forEach(seasonEntity -> {
                         seasonEntity.setTouched(entry.getValue());
-                        touchedSeasonEntities.add(seasonEntity);
+                        seasonCrudRepository.save(seasonEntity);
+                        touchedSeasonIds.add(seasonEntity.getId());
                     });
         }
-        return touchedSeasonEntities;
+        return touchedSeasonIds;
     }
 
     private void startCollectorThread(Runnable runnable) throws InterruptedException {
@@ -120,24 +124,37 @@ public class SeasonWikiRestService implements SeasonWikiService {
         collectorThread.start();
     }
 
-    private void collectSeasonUpdates(List<SeasonEntity> seasonEntities) {
-        for (SeasonEntity seasonEntity : seasonEntities) {
+    private void collectSeasonUpdates(List<Long> seasonIds, List<Long> touchedSeasonIds) {
+        seasonIds.removeAll(touchedSeasonIds);
+        for (Long seasonId : seasonIds) {
+            SeasonUpdate seasonUpdate = new SeasonUpdate();
+            seasonUpdate.setId(seasonId);
+            SeasonEntity seasonEntity = seasonCrudRepository.findOne(seasonId);
+            seasonUpdate.setTitle(seasonEntity.getTitle());
+            seasonUpdate.setNewEpisodes(episodeStoreService.getNewEpisodeNumbers(seasonId));
+            if (!seasonUpdate.getNewEpisodes().isEmpty()) {
+                seasonUpdatesCache.add(seasonUpdate);
+            }
+        }
+
+        for (Long touchedSeasonId : touchedSeasonIds) {
             if (Thread.interrupted()) {
                 break;
             }
             SeasonUpdate seasonUpdate = null;
             try {
-                seasonUpdate = collectSeasonUpdate(seasonEntity);
+                seasonUpdate = collectSeasonUpdate(touchedSeasonId);
             } catch (ParseException e) {
                 e.printStackTrace(); // TODO somehow note the fault, also catch unchecked exceptions?
             }
-            if (seasonUpdate != null) {
+            if (seasonUpdate != null && !seasonUpdate.getNewEpisodes().isEmpty()) {
                 seasonUpdatesCache.add(seasonUpdate);
             }
         }
     }
 
-    private SeasonUpdate collectSeasonUpdate(SeasonEntity seasonEntity) throws ParseException {
+    private SeasonUpdate collectSeasonUpdate(Long seasonId) throws ParseException {
+        SeasonEntity seasonEntity = seasonCrudRepository.findOne(seasonId);
         try {
             if (seasonEntity.getSection() < 0) {
                 seasonEntity.setSection(getSectionIndex(seasonEntity));
@@ -161,9 +178,14 @@ public class SeasonWikiRestService implements SeasonWikiService {
 
     private SeasonUpdate getSeasonUpdate(SeasonEntity seasonEntity) throws ParseException {
         JsonNode wikiSection = wikiRestTemplate.parseSection(seasonEntity.getPage(), seasonEntity.getSection());
-        Map<Integer, Date> episodeDates = parserFacade.extractEpisodeDates(wikiSection);
-        // convert map to seasonUpdate TODO
-        return null;
+        Map<Integer, Integer> episodeDates = parserFacade.extractEpisodeDates(wikiSection);
+        episodeStoreService.updateEpisodes(seasonEntity.getId(), episodeDates);
+
+        SeasonUpdate seasonUpdate = new SeasonUpdate();
+        seasonUpdate.setId(seasonEntity.getId());
+        seasonUpdate.setTitle(seasonEntity.getTitle());
+        seasonUpdate.setNewEpisodes(episodeStoreService.getNewEpisodeNumbers(seasonEntity.getId()));
+        return seasonUpdate;
     }
 
 }

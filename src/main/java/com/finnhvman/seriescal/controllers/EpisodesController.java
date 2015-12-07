@@ -26,5 +26,4 @@ public class EpisodesController {
         episodeStoreService.mark(seasonId, episodeNumber, enqueued);
     }
 
-
 }

@@ -17,7 +17,7 @@ public class ParserTokens {
     // Regex
     public static final String ANY_CHARACTER_REGEX = ".+";
     public static final String ANY_NOT_NUMBER_REGEX = "[^0-9]+";
-    public static final String ANY_WHITESPACE_CAHARCTER = "\\s";
+    public static final String ANY_WHITESPACE_CHARACTER = "\\s";
 
     // Query Parameters
     public static final String QUERY = "query";
