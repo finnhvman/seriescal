@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>SeriesCal</name>
-    <description>A simple web app for tracking your TV shows</description>
+    <description>A simple web server for tracking your TV shows</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

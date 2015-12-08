@@ -2,7 +2,7 @@ package com.finnhvman.seriescal.services.wiki.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.finnhvman.seriescal.model.SeasonUpdate;
-import com.finnhvman.seriescal.repository.SeasonCrudRepository;
+import com.finnhvman.seriescal.services.store.jpa.SeasonCrudRepository;
 import com.finnhvman.seriescal.services.store.EpisodeStoreService;
 import com.finnhvman.seriescal.services.store.jpa.entities.SeasonEntity;
 import com.finnhvman.seriescal.services.wiki.ParserFacade;

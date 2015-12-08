@@ -3,7 +3,6 @@ package com.finnhvman.seriescal.services.store.jpa;
 import com.finnhvman.seriescal.services.store.jpa.entities.SeasonEntity;
 import com.finnhvman.seriescal.model.Season;
 import com.finnhvman.seriescal.model.SeasonSeed;
-import com.finnhvman.seriescal.repository.SeasonCrudRepository;
 import com.finnhvman.seriescal.services.store.SeasonStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;

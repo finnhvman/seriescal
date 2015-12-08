@@ -1,4 +1,4 @@
-package com.finnhvman.seriescal.repository;
+package com.finnhvman.seriescal.services.store.jpa;
 
 import com.finnhvman.seriescal.services.store.jpa.entities.EpisodeEntity;
 import com.finnhvman.seriescal.services.store.jpa.entities.EpisodeEntityPK;

@@ -1,4 +1,4 @@
-package com.finnhvman.seriescal.repository;
+package com.finnhvman.seriescal.services.store.jpa;
 
 import com.finnhvman.seriescal.services.store.jpa.entities.SeasonEntity;
 import org.springframework.data.repository.CrudRepository;

@@ -2,7 +2,6 @@ package com.finnhvman.seriescal.services.store.jpa;
 
 import com.finnhvman.seriescal.conversion.EpisodeEntityToEpisodeConverter;
 import com.finnhvman.seriescal.model.Episode;
-import com.finnhvman.seriescal.repository.EpisodeCrudRepository;
 import com.finnhvman.seriescal.services.store.EpisodeStoreService;
 import com.finnhvman.seriescal.services.store.jpa.entities.EpisodeEntity;
 import com.finnhvman.seriescal.services.store.jpa.entities.EpisodeEntityPK;
