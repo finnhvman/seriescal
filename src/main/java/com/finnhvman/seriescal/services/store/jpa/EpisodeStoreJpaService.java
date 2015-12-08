@@ -33,30 +33,42 @@ public class EpisodeStoreJpaService implements EpisodeStoreService {
         for(Map.Entry<Integer, Integer> entry : episodeDates.entrySet()) {
             EpisodeEntity episodeEntity = episodeCrudRepository.findOne(new EpisodeEntityPK(seasonId, entry.getKey()));
             if (episodeEntity == null) {
-                episodeEntity = new EpisodeEntity();
-                episodeEntity.setSeasonId(seasonId);
-                episodeEntity.setNumber(entry.getKey());
-                episodeEntity.setDate(entry.getValue());
-                episodeCrudRepository.save(episodeEntity);
+                addEpisodeEntity(seasonId, entry);
             } else {
-                if (!episodeEntity.getDate().equals(entry.getValue())) {
-                    episodeEntity.setDate(entry.getValue());
-                    episodeCrudRepository.save(episodeEntity);
-                }
+                updateEpisodeEntityIfChanged(episodeEntity, entry.getValue());
             }
+        }
+    }
+
+    private void addEpisodeEntity(Long seasonId, Map.Entry<Integer, Integer> entry) {
+        EpisodeEntity episodeEntity = new EpisodeEntity();
+        episodeEntity.setSeasonId(seasonId);
+        episodeEntity.setNumber(entry.getKey());
+        episodeEntity.setDate(entry.getValue());
+        episodeCrudRepository.save(episodeEntity);
+    }
+
+    private void updateEpisodeEntityIfChanged(EpisodeEntity episodeEntity, Integer date) {
+        if (!episodeEntity.getDate().equals(date)) {
+            episodeEntity.setDate(date);
+            episodeCrudRepository.save(episodeEntity);
         }
     }
 
     @Override
     public List<Integer> getNewEpisodeNumbers(Long seasonId) {
+        int date = getCurrentDate();
+        return episodeCrudRepository.findBySeasonIdAndEnqueuedAndDateLessThan(seasonId, false, date).parallelStream()
+                .map(EpisodeEntity::getNumber)
+                .collect(Collectors.toList());
+    }
+
+    private Integer getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int date = (year % 100) * 10000 + month * 100 + day;
-        return episodeCrudRepository.findBySeasonIdAndEnqueuedAndDateLessThan(seasonId, false, date).parallelStream()
-                .map(EpisodeEntity::getNumber)
-                .collect(Collectors.toList());
+        return (year % 100) * 10000 + month * 100 + day;
     }
 
     @Override
