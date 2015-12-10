@@ -88,10 +88,10 @@ public class NewEpisodesQueryWikiService implements NewEpisodesQueryService {
     }
 
     private List<Long> getAndUpdateTouchedSeasons(List<Long> seasonIds) throws ParseException {
-        Set<String> pages = seasonStoreService.getSeasonPages(seasonIds);
+        Set<String> pages = seasonStoreService.getSeasonsPages(seasonIds);
         Map<String, Long> touchedTimes = seasonWikiService.getTouchedTimes(pages);
         return touchedTimes.entrySet().stream()
-                .flatMap(entry -> seasonStoreService.updateTouchedSeasons(entry.getKey(), entry.getValue()).stream())
+                .flatMap(entry -> seasonStoreService.updateTouchedOfTouchedSeasonsFoundByPage(entry.getKey(), entry.getValue()).stream())
                 .collect(Collectors.toList());
     }
 
@@ -141,8 +141,7 @@ public class NewEpisodesQueryWikiService implements NewEpisodesQueryService {
     private void updateSectionIndex(Long seasonId) throws ParseException {
         SeasonEntity seasonEntity = seasonStoreService.getSeasonEntity(seasonId);
         Integer sectionIndex = seasonWikiService.getSectionIndex(seasonEntity.getWikiUrl());
-        seasonEntity.setSection(sectionIndex);
-        seasonStoreService.update(seasonEntity);
+        seasonStoreService.updateSectionOfSeason(seasonId, sectionIndex);
     }
 
 }

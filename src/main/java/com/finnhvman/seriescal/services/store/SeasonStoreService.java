@@ -9,13 +9,13 @@ import java.util.Set;
 
 public interface SeasonStoreService {
     SeasonEntity getSeasonEntity(Long seasonId);
-    void update(SeasonEntity seasonEntity);
 
     List<Season> getAllSeason();
     Long add(SeasonSeed seasonSeed);
     void update(Long seasonId, SeasonSeed seasonSeed);
     void remove(Long seasonId);
 
-    Set<String> getSeasonPages(List<Long> seasonIds);
-    List<Long> updateTouchedSeasons(String page, Long touchedTime);
+    Set<String> getSeasonsPages(List<Long> seasonIds);
+    List<Long> updateTouchedOfTouchedSeasonsFoundByPage(String page, Long touched);
+    void updateSectionOfSeason(Long seasonId, Integer section);
 }

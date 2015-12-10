@@ -28,11 +28,6 @@ public class SeasonStoreJpaService implements SeasonStoreService {
     }
 
     @Override
-    public void update(SeasonEntity seasonEntity) {
-        seasonCrudRepository.save(seasonEntity);
-    }
-
-    @Override
     public List<Season> getAllSeason() {
         return seasonCrudRepository.findAll().parallelStream()
                 .map(seasonEntityToSeasonConverter::convert)
@@ -59,7 +54,7 @@ public class SeasonStoreJpaService implements SeasonStoreService {
     }
 
     @Override
-    public Set<String> getSeasonPages(List<Long> seasonIds) {
+    public Set<String> getSeasonsPages(List<Long> seasonIds) {
         List<SeasonEntity> seasonEntities = seasonCrudRepository.findByIdIn(seasonIds);
         return seasonEntities.parallelStream()
                 .map(SeasonEntity::getPage)
@@ -67,15 +62,22 @@ public class SeasonStoreJpaService implements SeasonStoreService {
     }
 
     @Override
-    public List<Long> updateTouchedSeasons(String page, Long touchedTime) { // TODO maybe rename
+    public List<Long> updateTouchedOfTouchedSeasonsFoundByPage(String page, Long touched) {
         return seasonCrudRepository.findByPage(page).stream()
-                .filter(seasonEntity -> seasonEntity.getTouched() < touchedTime)
+                .filter(seasonEntity -> seasonEntity.getTouched() < touched)
                 .map(seasonEntity -> {
-                    seasonEntity.setTouched(touchedTime);
+                    seasonEntity.setTouched(touched);
                     seasonCrudRepository.save(seasonEntity);
                     return seasonEntity.getId();
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateSectionOfSeason(Long seasonId, Integer section) {
+        SeasonEntity seasonEntity = seasonCrudRepository.findOne(seasonId);
+        seasonEntity.setSection(section);
+        seasonCrudRepository.save(seasonEntity);
     }
 
 }
