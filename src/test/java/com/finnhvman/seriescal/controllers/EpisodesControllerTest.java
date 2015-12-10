@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,14 +32,14 @@ public class EpisodesControllerTest {
         episode.setNumber(1);
         episode.setEnqueued(true);
 
-        Mockito.when(episodeStoreService.getAllEpisodes(1L)).thenReturn(Collections.singletonList(episode));
+        Mockito.when(episodeStoreService.getAllEpisodes(1L)).thenReturn(Collections.singleton(episode));
 
 
-        List<Episode> episodes = underTest.listEpisodes(1L);
+        Collection<Episode> episodes = underTest.listEpisodes(1L);
 
 
         Assert.assertEquals(1, episodes.size());
-        Assert.assertEquals(episode, episodes.get(0));
+        Assert.assertTrue(episodes.contains(episode));
     }
 
     @Test

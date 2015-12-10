@@ -27,8 +27,8 @@ public class ParserFacade {
         return infoParser.extractTouchedTimes(info);
     }
 
-    public Integer extractSectionNumber(JsonNode info, String seasonNumber) throws ParseException {
-        return sectionsParser.extractSectionNumber(info, seasonNumber);
+    public Integer extractSectionIndex(JsonNode info, String seasonNumber) throws ParseException {
+        return sectionsParser.extractSectionIndex(info, seasonNumber);
     }
 
     public Map<Integer, Integer> extractEpisodeDates(JsonNode wikiSection) throws ParseException {

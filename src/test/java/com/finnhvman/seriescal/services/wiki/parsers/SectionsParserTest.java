@@ -14,55 +14,55 @@ public class SectionsParserTest {
     private SectionsParser underTest = new SectionsParser();
 
     @Test(expected = ParseException.class)
-    public void testExtractSectionNumberOnEmptySections() throws Exception {
+    public void testExtractSectionIndexOnEmptySections() throws Exception {
         JsonNode sections = readJson("EmptySections.json");
 
-        underTest.extractSectionNumber(sections, "0");
+        underTest.extractSectionIndex(sections, "0");
     }
 
     @Test
-    public void testExtractSectionNumberOnBobsBurgersSeason6() throws Exception {
+    public void testExtractSectionIndexOnBobsBurgersSeason6() throws Exception {
         JsonNode sections = readJson("BobsBurgersSeason6Sections.json");
 
-        int sectionNumber = underTest.extractSectionNumber(sections, "6");
+        int sectionIndex = underTest.extractSectionIndex(sections, "6");
 
-        Assert.assertEquals(1, sectionNumber);
+        Assert.assertEquals(1, sectionIndex);
     }
 
     @Test
-    public void testExtractSectionNumberOnFearTheWalkingDead() throws Exception {
+    public void testExtractSectionIndexOnFearTheWalkingDead() throws Exception {
         JsonNode sections = readJson("FearTheWalkingDeadSections.json");
 
-        int sectionNumber = underTest.extractSectionNumber(sections, "1");
+        int sectionIndex = underTest.extractSectionIndex(sections, "1");
 
-        Assert.assertEquals(4, sectionNumber);
+        Assert.assertEquals(4, sectionIndex);
     }
 
     @Test
-    public void testExtractSectionNumberOnMrRobot() throws Exception {
+    public void testExtractSectionIndexOnMrRobot() throws Exception {
         JsonNode sections = readJson("MrRobotSections.json");
 
-        int sectionNumber = underTest.extractSectionNumber(sections, "1");
+        int sectionIndex = underTest.extractSectionIndex(sections, "1");
 
-        Assert.assertEquals(6, sectionNumber);
+        Assert.assertEquals(6, sectionIndex);
     }
 
     @Test
-    public void testExtractSectionNumberOnSherlock() throws Exception {
+    public void testExtractSectionIndexOnSherlock() throws Exception {
         JsonNode sections = readJson("SherlockSections.json");
 
-        int sectionNumber = underTest.extractSectionNumber(sections, "3");
+        int sectionIndex = underTest.extractSectionIndex(sections, "3");
 
-        Assert.assertEquals(5, sectionNumber);
+        Assert.assertEquals(5, sectionIndex);
     }
 
     @Test
-    public void testExtractSectionNumberOnTheBigBangTheorySeason8() throws Exception {
+    public void testExtractSectionIndexOnTheBigBangTheorySeason8() throws Exception {
         JsonNode sections = readJson("TheBigBangTheorySeason8Sections.json");
 
-        int sectionNumber = underTest.extractSectionNumber(sections, "8");
+        int sectionIndex = underTest.extractSectionIndex(sections, "8");
 
-        Assert.assertEquals(5, sectionNumber);
+        Assert.assertEquals(5, sectionIndex);
     }
 
     private JsonNode readJson(String fileName) throws IOException {

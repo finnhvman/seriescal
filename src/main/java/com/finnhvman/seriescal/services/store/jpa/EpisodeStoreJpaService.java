@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,10 +22,10 @@ public class EpisodeStoreJpaService implements EpisodeStoreService {
     private EpisodeEntityToEpisodeConverter episodeEntityToEpisodeConverter;
 
     @Override
-    public List<Episode> getAllEpisodes(Long seasonId) {
+    public Set<Episode> getAllEpisodes(Long seasonId) {
         return episodeCrudRepository.findBySeasonId(seasonId).parallelStream()
                 .map(episodeEntityToEpisodeConverter::convert)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -56,11 +56,11 @@ public class EpisodeStoreJpaService implements EpisodeStoreService {
     }
 
     @Override
-    public List<Integer> getNewEpisodeNumbers(Long seasonId) {
+    public Set<Integer> getNewEpisodeNumbers(Long seasonId) {
         int date = getCurrentDate();
         return episodeCrudRepository.findBySeasonIdAndEnqueuedAndDateLessThan(seasonId, false, date).parallelStream()
                 .map(EpisodeEntity::getNumber)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private Integer getCurrentDate() {

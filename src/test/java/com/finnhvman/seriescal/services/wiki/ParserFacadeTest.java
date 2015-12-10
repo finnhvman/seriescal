@@ -43,10 +43,10 @@ public class ParserFacadeTest {
     }
 
     @Test
-    public void testExtractSectionNumber() throws Exception {
-        underTest.extractSectionNumber(mockJson, "1");
+    public void testExtractSectionIndex() throws Exception {
+        underTest.extractSectionIndex(mockJson, "1");
 
-        Mockito.verify(sectionsParser).extractSectionNumber(mockJson, "1");
+        Mockito.verify(sectionsParser).extractSectionIndex(mockJson, "1");
     }
 
     @Test

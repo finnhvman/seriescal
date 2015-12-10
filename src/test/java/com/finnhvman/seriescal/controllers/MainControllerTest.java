@@ -1,7 +1,7 @@
 package com.finnhvman.seriescal.controllers;
 
 import com.finnhvman.seriescal.model.SeasonUpdate;
-import com.finnhvman.seriescal.services.wiki.SeasonWikiService;
+import com.finnhvman.seriescal.services.query.NewEpisodesQueryService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class MainControllerTest {
     @InjectMocks
     private MainController underTest;
     @Mock
-    private SeasonWikiService seasonWikiService;
+    private NewEpisodesQueryService newEpisodesQueryService;
 
     @Before
     public void setUp() {
@@ -32,13 +32,13 @@ public class MainControllerTest {
     public void ifNotQueryingEpisodes_SubmitNewEpisodesQuery_ShouldStartANewQuery() throws Exception {
         List<Long> seasonIds = Arrays.asList(1L, 2L, 3L);
 
-        Mockito.when(seasonWikiService.isQuerying()).thenReturn(false);
+        Mockito.when(newEpisodesQueryService.isQuerying()).thenReturn(false);
 
 
         ResponseEntity responseEntity = underTest.submitNewEpisodesQuery(seasonIds);
 
 
-        Mockito.verify(seasonWikiService).queryNewEpisodes(seasonIds);
+        Mockito.verify(newEpisodesQueryService).queryNewEpisodes(seasonIds);
 
         Assert.assertEquals("Querying...", responseEntity.getBody());
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -48,14 +48,14 @@ public class MainControllerTest {
     public void ifQueryingSpecifiedEpisodes_SubmitNewEpisodesQuery_ShouldNotStartANewQuery() throws Exception {
         List<Long> seasonIds = Arrays.asList(1L, 2L, 3L);
 
-        Mockito.when(seasonWikiService.isQuerying()).thenReturn(true);
-        Mockito.when(seasonWikiService.queryContains(seasonIds)).thenReturn(true);
+        Mockito.when(newEpisodesQueryService.isQuerying()).thenReturn(true);
+        Mockito.when(newEpisodesQueryService.queryContains(seasonIds)).thenReturn(true);
 
 
         ResponseEntity responseEntity = underTest.submitNewEpisodesQuery(seasonIds);
 
 
-        Mockito.verify(seasonWikiService, Mockito.never()).queryNewEpisodes(seasonIds);
+        Mockito.verify(newEpisodesQueryService, Mockito.never()).queryNewEpisodes(seasonIds);
 
         Assert.assertEquals("Querying...", responseEntity.getBody());
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -65,14 +65,14 @@ public class MainControllerTest {
     public void ifQueryingNotSpecifiedEpisodes_SubmitNewEpisodesQuery_ShouldStartANewQuery() throws Exception {
         List<Long> seasonIds = Arrays.asList(1L, 2L, 3L);
 
-        Mockito.when(seasonWikiService.isQuerying()).thenReturn(true);
-        Mockito.when(seasonWikiService.queryContains(seasonIds)).thenReturn(false);
+        Mockito.when(newEpisodesQueryService.isQuerying()).thenReturn(true);
+        Mockito.when(newEpisodesQueryService.queryContains(seasonIds)).thenReturn(false);
 
 
         ResponseEntity responseEntity = underTest.submitNewEpisodesQuery(seasonIds);
 
 
-        Mockito.verify(seasonWikiService).queryNewEpisodes(seasonIds);
+        Mockito.verify(newEpisodesQueryService).queryNewEpisodes(seasonIds);
 
         Assert.assertEquals("Querying...", responseEntity.getBody());
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -84,14 +84,14 @@ public class MainControllerTest {
         SeasonUpdate seasonUpdate1 = new SeasonUpdate();
         seasonUpdate1.setTitle("Title1");
         seasonUpdate1.setId(1L);
-        seasonUpdate1.setNewEpisodes(Collections.singletonList(13));
+        seasonUpdate1.setNewEpisodes(Collections.singleton(13));
         SeasonUpdate seasonUpdate2 = new SeasonUpdate();
         seasonUpdate2.setTitle("Title2");
         seasonUpdate2.setId(2L);
-        seasonUpdate2.setNewEpisodes(Collections.singletonList(20));
+        seasonUpdate2.setNewEpisodes(Collections.singleton(20));
 
-        Mockito.when(seasonWikiService.isQuerying()).thenReturn(false);
-        Mockito.when(seasonWikiService.getNewEpisodes(seasonIds))
+        Mockito.when(newEpisodesQueryService.isQuerying()).thenReturn(false);
+        Mockito.when(newEpisodesQueryService.getNewEpisodes(seasonIds))
                 .thenReturn(Arrays.asList(seasonUpdate1, seasonUpdate2));
 
 
@@ -111,11 +111,11 @@ public class MainControllerTest {
         SeasonUpdate seasonUpdate1 = new SeasonUpdate();
         seasonUpdate1.setTitle("Title1");
         seasonUpdate1.setId(1L);
-        seasonUpdate1.setNewEpisodes(Collections.singletonList(13));
+        seasonUpdate1.setNewEpisodes(Collections.singleton(13));
 
-        Mockito.when(seasonWikiService.isQuerying()).thenReturn(true);
-        Mockito.when(seasonWikiService.queryContains(seasonIds)).thenReturn(true);
-        Mockito.when(seasonWikiService.getNewEpisodes(seasonIds))
+        Mockito.when(newEpisodesQueryService.isQuerying()).thenReturn(true);
+        Mockito.when(newEpisodesQueryService.queryContains(seasonIds)).thenReturn(true);
+        Mockito.when(newEpisodesQueryService.getNewEpisodes(seasonIds))
                 .thenReturn(Collections.singletonList(seasonUpdate1));
 
 
@@ -132,8 +132,8 @@ public class MainControllerTest {
     public void ifQueryingNotSpecifiedEpisodes_GetNewEpisodesQuery_ShouldFail() throws Exception {
         List<Long> seasonIds = Arrays.asList(1L, 2L, 3L);
 
-        Mockito.when(seasonWikiService.isQuerying()).thenReturn(true);
-        Mockito.when(seasonWikiService.queryContains(seasonIds)).thenReturn(false);
+        Mockito.when(newEpisodesQueryService.isQuerying()).thenReturn(true);
+        Mockito.when(newEpisodesQueryService.queryContains(seasonIds)).thenReturn(false);
 
 
         ResponseEntity responseEntity = underTest.getNewEpisodesQuery(seasonIds);

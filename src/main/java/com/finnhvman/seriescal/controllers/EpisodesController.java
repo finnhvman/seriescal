@@ -1,13 +1,11 @@
 package com.finnhvman.seriescal.controllers;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.finnhvman.seriescal.services.store.EpisodeStoreService;
 import com.finnhvman.seriescal.model.Episode;
+import com.finnhvman.seriescal.services.store.EpisodeStoreService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/seasons")
@@ -17,7 +15,7 @@ public class EpisodesController {
     private EpisodeStoreService episodeStoreService;
 
     @RequestMapping(value = "/{seasonId}", method = RequestMethod.GET)
-    public List<Episode> listEpisodes(@PathVariable Long seasonId) {
+    public Collection<Episode> listEpisodes(@PathVariable Long seasonId) {
         return episodeStoreService.getAllEpisodes(seasonId);
     }
 

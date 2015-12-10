@@ -9,6 +9,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,6 +21,16 @@ public class SeasonStoreJpaService implements SeasonStoreService {
     private Converter<SeasonEntity, Season> seasonEntityToSeasonConverter;
     @Autowired
     private Converter<SeasonSeed, SeasonEntity> seasonSeedToSeasonEntityConverter;
+
+    @Override
+    public SeasonEntity getSeasonEntity(Long seasonId) {
+        return seasonCrudRepository.findOne(seasonId);
+    }
+
+    @Override
+    public void update(SeasonEntity seasonEntity) {
+        seasonCrudRepository.save(seasonEntity);
+    }
 
     @Override
     public List<Season> getAllSeason() {
@@ -45,6 +56,26 @@ public class SeasonStoreJpaService implements SeasonStoreService {
     @Override
     public void remove(Long seasonId) {
         seasonCrudRepository.delete(seasonId);
+    }
+
+    @Override
+    public Set<String> getSeasonPages(List<Long> seasonIds) {
+        List<SeasonEntity> seasonEntities = seasonCrudRepository.findByIdIn(seasonIds);
+        return seasonEntities.parallelStream()
+                .map(SeasonEntity::getPage)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<Long> updateTouchedSeasons(String page, Long touchedTime) { // TODO maybe rename
+        return seasonCrudRepository.findByPage(page).stream()
+                .filter(seasonEntity -> seasonEntity.getTouched() < touchedTime)
+                .map(seasonEntity -> {
+                    seasonEntity.setTouched(touchedTime);
+                    seasonCrudRepository.save(seasonEntity);
+                    return seasonEntity.getId();
+                })
+                .collect(Collectors.toList());
     }
 
 }

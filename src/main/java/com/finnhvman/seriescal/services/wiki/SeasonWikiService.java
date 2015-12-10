@@ -1,12 +1,11 @@
 package com.finnhvman.seriescal.services.wiki;
 
-import com.finnhvman.seriescal.model.SeasonUpdate;
-
-import java.util.List;
+import java.text.ParseException;
+import java.util.Collection;
+import java.util.Map;
 
 public interface SeasonWikiService {
-    boolean isQuerying();
-    boolean queryContains(List<Long> seasonIds);
-    List<SeasonUpdate> getNewEpisodes(List<Long> seasonIds);
-    void queryNewEpisodes(List<Long> seasonIds);
+    Map<String, Long> getTouchedTimes(Collection<String> pages) throws ParseException;
+    int getSectionIndex(String wikiUrl) throws ParseException;
+    Map<Integer, Integer> getEpisodeDates(String page, int section) throws ParseException;
 }

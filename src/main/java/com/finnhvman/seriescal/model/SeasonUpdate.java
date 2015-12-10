@@ -1,11 +1,11 @@
 package com.finnhvman.seriescal.model;
 
-import java.util.List;
+import java.util.Set;
 
 public class SeasonUpdate {
 
     private Long id;
-    private List<Integer> newEpisodes;
+    private Set<Integer> newEpisodes;
     private String title;
 
     public Long getId() {
@@ -16,11 +16,11 @@ public class SeasonUpdate {
         this.id = id;
     }
 
-    public List<Integer> getNewEpisodes() {
+    public Set<Integer> getNewEpisodes() {
         return newEpisodes;
     }
 
-    public void setNewEpisodes(List<Integer> newEpisodes) {
+    public void setNewEpisodes(Set<Integer> newEpisodes) {
         this.newEpisodes = newEpisodes;
     }
 

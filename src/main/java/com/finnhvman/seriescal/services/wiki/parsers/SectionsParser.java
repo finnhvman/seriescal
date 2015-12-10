@@ -11,7 +11,7 @@ import static com.finnhvman.seriescal.services.wiki.parsers.constants.ParserToke
 @Component
 public class SectionsParser {
 
-    public Integer extractSectionNumber(JsonNode sections, String seasonNumber) throws ParseException {
+    public Integer extractSectionIndex(JsonNode sections, String seasonNumber) throws ParseException {
         Map<String, Integer> sectionsList = extractSectionsList(sections);
         for (Map.Entry<String, Integer> section : sectionsList.entrySet()) {
             if (matchNumberedSection(section.getKey(), seasonNumber)) {
@@ -26,7 +26,7 @@ public class SectionsParser {
         throw new ParseException("Section not found.", 0);
     }
 
-    private Map<String, Integer>  extractSectionsList(JsonNode sections) {
+    private Map<String, Integer> extractSectionsList(JsonNode sections) {
         JsonNode parseNode = sections.get(PARSE);
         JsonNode sectionsNode = parseNode.get(SECTIONS);
         return collectSections(sectionsNode.iterator());

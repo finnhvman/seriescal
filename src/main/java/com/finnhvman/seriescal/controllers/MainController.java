@@ -1,6 +1,6 @@
 package com.finnhvman.seriescal.controllers;
 
-import com.finnhvman.seriescal.services.wiki.SeasonWikiService;
+import com.finnhvman.seriescal.services.query.NewEpisodesQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,32 +17,32 @@ public class MainController {
     // TODO validation
 
     @Autowired
-    private SeasonWikiService seasonWikiService;
+    private NewEpisodesQueryService newEpisodesQueryService;
 
     @RequestMapping(value = "/new-episodes-query", method = RequestMethod.PUT)
     public ResponseEntity<?> submitNewEpisodesQuery(@RequestParam List<Long> seasonIds) {
-        if (seasonWikiService.isQuerying()) {
-            if (!seasonWikiService.queryContains(seasonIds)) {
-                seasonWikiService.queryNewEpisodes(seasonIds);
+        if (newEpisodesQueryService.isQuerying()) {
+            if (!newEpisodesQueryService.queryContains(seasonIds)) {
+                newEpisodesQueryService.queryNewEpisodes(seasonIds);
             }
         } else {
-            seasonWikiService.queryNewEpisodes(seasonIds);
+            newEpisodesQueryService.queryNewEpisodes(seasonIds);
         }
         return new ResponseEntity<>("Querying...", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/new-episodes-query", method = RequestMethod.GET)
     public ResponseEntity<?> getNewEpisodesQuery(@RequestParam List<Long> seasonIds) {
-        if (seasonWikiService.isQuerying()) {
-            if (seasonWikiService.queryContains(seasonIds)) {
+        if (newEpisodesQueryService.isQuerying()) {
+            if (newEpisodesQueryService.queryContains(seasonIds)) {
                 // TODO UI gets partial data
-                return new ResponseEntity<>(seasonWikiService.getNewEpisodes(seasonIds), HttpStatus.PARTIAL_CONTENT);
+                return new ResponseEntity<>(newEpisodesQueryService.getNewEpisodes(seasonIds), HttpStatus.PARTIAL_CONTENT);
             } else {
                 return new ResponseEntity<>("Part or all of the seasons specified in the request are not being or have not been queried. " +
                         "A new query with the seasons specified in the request has to be submitted  beforehand.", HttpStatus.PRECONDITION_FAILED);
             }
         } else {
-            return new ResponseEntity<>(seasonWikiService.getNewEpisodes(seasonIds), HttpStatus.OK);
+            return new ResponseEntity<>(newEpisodesQueryService.getNewEpisodes(seasonIds), HttpStatus.OK);
         }
     }
 
