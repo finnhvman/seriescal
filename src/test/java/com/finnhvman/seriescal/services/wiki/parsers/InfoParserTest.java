@@ -22,7 +22,7 @@ public class InfoParserTest {
         Assert.assertEquals(5, touchedTimes.size());
         Assert.assertEquals(Long.valueOf(1449022201000L), touchedTimes.get("List_of_Sherlock_episodes"));
         Assert.assertEquals(Long.valueOf(1448749712000L), touchedTimes.get("The_Big_Bang_Theory_(season_8)"));
-        Assert.assertEquals(Long.valueOf(1449083380000L), touchedTimes.get("Mr._Robot_(TV series)"));
+        Assert.assertEquals(Long.valueOf(1449083380000L), touchedTimes.get("Mr._Robot_(TV_series)"));
         Assert.assertEquals(Long.valueOf(1448243397000L), touchedTimes.get("Bob's_Burgers_(season_6)"));
         Assert.assertEquals(Long.valueOf(1448971243000L), touchedTimes.get("Fear_the_Walking_Dead"));
     }
