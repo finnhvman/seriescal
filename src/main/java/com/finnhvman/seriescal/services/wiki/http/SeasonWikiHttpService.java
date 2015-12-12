@@ -1,4 +1,4 @@
-package com.finnhvman.seriescal.services.wiki.rest;
+package com.finnhvman.seriescal.services.wiki.http;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.finnhvman.seriescal.services.wiki.ParserFacade;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @Component
-public class SeasonWikiRestService implements SeasonWikiService {
+public class SeasonWikiHttpService implements SeasonWikiService {
 
     private static final String PIPE = "|";
 

@@ -1,4 +1,4 @@
-package com.finnhvman.seriescal.services.wiki.rest;
+package com.finnhvman.seriescal.services.wiki.http;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpEntity;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.finnhvman.seriescal.services.wiki.rest.constants.QueryParameters.*;
+import static com.finnhvman.seriescal.services.wiki.http.constants.QueryParameters.*;
 
 @Component
 public class WikiRestTemplate {

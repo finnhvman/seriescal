@@ -3,23 +3,19 @@ package com.finnhvman.seriescal.services.wiki;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finnhvman.seriescal.SeriesCalApplication;
-import com.finnhvman.seriescal.services.wiki.rest.WikiRestTemplate;
-import com.finnhvman.seriescal.services.wiki.rest.constants.QueryParameters;
+import com.finnhvman.seriescal.services.wiki.http.SeasonWikiHttpService;
+import com.finnhvman.seriescal.services.wiki.http.WikiRestTemplate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.support.RestGatewaySupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,13 +30,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = SeriesCalApplication.class)
-public class SeasonWikiServiceIntegrationTest {
+public class SeasonWikiHttpServiceIntegrationTest {
 
     private static final String WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php";
     private static final String MRR1 = "Mr._Robot_%28TV_series%29#Season_1_.282015.29";
 
     @Autowired
-    private SeasonWikiService underTest;
+    private SeasonWikiHttpService underTest;
     private MockRestServiceServer mockServer;
 
     @Before

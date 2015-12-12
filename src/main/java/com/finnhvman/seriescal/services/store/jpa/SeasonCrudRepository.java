@@ -9,8 +9,6 @@ public interface SeasonCrudRepository extends CrudRepository<SeasonEntity, Long>
 
     List<SeasonEntity> findAll();
 
-    SeasonEntity save(SeasonEntity seasonEntity);
-
     SeasonEntity findOne(Long id);
 
     List<SeasonEntity> findByIdIn(List<Long> ids);

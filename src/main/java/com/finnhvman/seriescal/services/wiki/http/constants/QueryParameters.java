@@ -1,4 +1,4 @@
-package com.finnhvman.seriescal.services.wiki.rest.constants;
+package com.finnhvman.seriescal.services.wiki.http.constants;
 
 public class QueryParameters {
 
