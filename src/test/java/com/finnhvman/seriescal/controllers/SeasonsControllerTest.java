@@ -41,7 +41,7 @@ public class SeasonsControllerTest {
 
 
         Assert.assertEquals(1, seasons.size());
-        Assert.assertEquals(season, seasons.get(0));
+        Assert.assertTrue(seasons.contains(season));
     }
 
     @Test
@@ -49,14 +49,18 @@ public class SeasonsControllerTest {
         SeasonSeed seasonSeed = new SeasonSeed();
         seasonSeed.setUrl("url");
 
-        Mockito.when(seasonStoreService.add(seasonSeed)).thenReturn(1L);
+        Season season = new Season();
+        season.setTitle("title");
+        season.setId(1L);
+
+        Mockito.when(seasonStoreService.add(seasonSeed)).thenReturn(season);
 
 
         ResponseEntity responseEntity = underTest.addSeason(seasonSeed);
 
 
-        Assert.assertEquals(1L, responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assert.assertEquals(season, responseEntity.getBody());
+        Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     }
 
     @Test
@@ -64,9 +68,17 @@ public class SeasonsControllerTest {
         SeasonSeed seasonSeed = new SeasonSeed();
         seasonSeed.setUrl("url");
 
+        Season season = new Season();
+        season.setTitle("title");
+        season.setId(1L);
+
+        Mockito.when(seasonStoreService.update(1L, seasonSeed)).thenReturn(season);
+
+
         ResponseEntity responseEntity = underTest.updateSeason(1L, seasonSeed);
 
-        Mockito.verify(seasonStoreService).update(1L, seasonSeed);
+
+        Assert.assertEquals(season, responseEntity.getBody());
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
@@ -74,8 +86,9 @@ public class SeasonsControllerTest {
     public void testRemoveSeason() {
         ResponseEntity responseEntity = underTest.removeSeason(1L);
 
+
         Mockito.verify(seasonStoreService).remove(1L);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
     }
 
 }

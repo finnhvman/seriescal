@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.finnhvman.seriescal.services.wiki.ParserFacade;
 import com.finnhvman.seriescal.services.wiki.SeasonWikiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Map;
 
-@Component
+@Service
 public class SeasonWikiHttpService implements SeasonWikiService {
 
     private static final String PIPE = "|";

@@ -28,7 +28,7 @@ public class MainController {
         } else {
             newEpisodesQueryService.queryNewEpisodes(seasonIds);
         }
-        return new ResponseEntity<>("Querying...", HttpStatus.OK);
+        return new ResponseEntity<>("Querying...", HttpStatus.ACCEPTED);
     }
 
     @RequestMapping(value = "/new-episodes-query", method = RequestMethod.GET)

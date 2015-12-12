@@ -41,7 +41,7 @@ public class MainControllerTest {
         Mockito.verify(newEpisodesQueryService).queryNewEpisodes(seasonIds);
 
         Assert.assertEquals("Querying...", responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.ACCEPTED, responseEntity.getStatusCode());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class MainControllerTest {
         Mockito.verify(newEpisodesQueryService, Mockito.never()).queryNewEpisodes(seasonIds);
 
         Assert.assertEquals("Querying...", responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.ACCEPTED, responseEntity.getStatusCode());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class MainControllerTest {
         Mockito.verify(newEpisodesQueryService).queryNewEpisodes(seasonIds);
 
         Assert.assertEquals("Querying...", responseEntity.getBody());
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.ACCEPTED, responseEntity.getStatusCode());
     }
 
     @Test

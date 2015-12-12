@@ -6,14 +6,14 @@ import com.finnhvman.seriescal.services.store.EpisodeStoreService;
 import com.finnhvman.seriescal.services.store.jpa.entities.EpisodeEntity;
 import com.finnhvman.seriescal.services.store.jpa.entities.EpisodeEntityPK;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class EpisodeStoreJpaService implements EpisodeStoreService {
 
     @Autowired

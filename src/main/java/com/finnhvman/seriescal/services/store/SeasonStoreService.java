@@ -11,8 +11,8 @@ public interface SeasonStoreService {
     SeasonEntity getSeasonEntity(Long seasonId);
 
     List<Season> getAllSeason();
-    Long add(SeasonSeed seasonSeed);
-    void update(Long seasonId, SeasonSeed seasonSeed);
+    Season add(SeasonSeed seasonSeed);
+    Season update(Long seasonId, SeasonSeed seasonSeed);
     void remove(Long seasonId);
 
     Set<String> getSeasonsPages(List<Long> seasonIds);

@@ -35,17 +35,18 @@ public class SeasonStoreJpaService implements SeasonStoreService {
     }
 
     @Override
-    public Long add(SeasonSeed seasonSeed) {
+    public Season add(SeasonSeed seasonSeed) {
         SeasonEntity seasonEntity = seasonSeedToSeasonEntityConverter.convert(seasonSeed);
         seasonEntity = seasonCrudRepository.save(seasonEntity);
-        return seasonEntity.getId();
+        return seasonEntityToSeasonConverter.convert(seasonEntity);
     }
 
     @Override
-    public void update(Long seasonId, SeasonSeed seasonSeed) {
+    public Season update(Long seasonId, SeasonSeed seasonSeed) {
         SeasonEntity seasonEntity = seasonSeedToSeasonEntityConverter.convert(seasonSeed);
         seasonEntity.setId(seasonId);
-        seasonCrudRepository.save(seasonEntity);
+        seasonEntity = seasonCrudRepository.save(seasonEntity);
+        return seasonEntityToSeasonConverter.convert(seasonEntity);
     }
 
     @Override

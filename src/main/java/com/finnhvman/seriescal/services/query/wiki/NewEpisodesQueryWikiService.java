@@ -7,13 +7,13 @@ import com.finnhvman.seriescal.services.store.SeasonStoreService;
 import com.finnhvman.seriescal.services.store.jpa.entities.SeasonEntity;
 import com.finnhvman.seriescal.services.wiki.SeasonWikiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class NewEpisodesQueryWikiService implements NewEpisodesQueryService {
 
     @Autowired

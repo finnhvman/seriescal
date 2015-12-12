@@ -61,10 +61,10 @@ public class SeasonStoreJpaServiceIntegrationTest {
         seasonSeed.setUrl(BCS2);
 
 
-        Long id = underTest.add(seasonSeed);
+        Season season = underTest.add(seasonSeed);
 
 
-        SeasonEntity result = seasonCrudRepository.findOne(id);
+        SeasonEntity result = seasonCrudRepository.findOne(season.getId());
 
         Assert.assertEquals("List_of_Better_Call_Saul_episodes#Season_2_.282016.29", result.getWikiUrl());
         Assert.assertEquals("List_of_Better_Call_Saul_episodes", result.getPage());
