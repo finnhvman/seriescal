@@ -1,4 +1,4 @@
-package com.finnhvman.seriescal.services.query;
+package com.finnhvman.seriescal.services.update;
 
 import com.finnhvman.seriescal.model.SeasonNews;
 

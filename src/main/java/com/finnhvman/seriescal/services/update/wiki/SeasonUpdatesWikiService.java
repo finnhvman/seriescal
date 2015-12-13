@@ -1,7 +1,7 @@
-package com.finnhvman.seriescal.services.query.wiki;
+package com.finnhvman.seriescal.services.update.wiki;
 
 import com.finnhvman.seriescal.model.SeasonNews;
-import com.finnhvman.seriescal.services.query.SeasonUpdatesService;
+import com.finnhvman.seriescal.services.update.SeasonUpdatesService;
 import com.finnhvman.seriescal.services.store.EpisodeStoreService;
 import com.finnhvman.seriescal.services.store.SeasonStoreService;
 import com.finnhvman.seriescal.services.store.jpa.entities.SeasonEntity;
@@ -37,7 +37,7 @@ public class SeasonUpdatesWikiService implements SeasonUpdatesService {
     }
 
     @Override
-    public void querySeasonUpdates() { // TODO what if accessed via multiple threads?
+    public void querySeasonUpdates() {
         try {
             collectorProgress = 0;
             List<Long> seasonIds = seasonStoreService.getAllSeasonIds();

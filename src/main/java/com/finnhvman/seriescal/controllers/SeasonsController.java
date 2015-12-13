@@ -3,7 +3,7 @@ package com.finnhvman.seriescal.controllers;
 import com.finnhvman.seriescal.model.Season;
 import com.finnhvman.seriescal.model.SeasonNews;
 import com.finnhvman.seriescal.model.SeasonSeed;
-import com.finnhvman.seriescal.services.query.SeasonUpdatesService;
+import com.finnhvman.seriescal.services.update.SeasonUpdatesService;
 import com.finnhvman.seriescal.services.store.SeasonStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
