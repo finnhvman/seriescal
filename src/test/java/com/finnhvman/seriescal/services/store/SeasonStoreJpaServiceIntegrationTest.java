@@ -119,6 +119,20 @@ public class SeasonStoreJpaServiceIntegrationTest {
     }
 
     @Test
+    public void testGetAllSeasonIds() throws Exception {
+        SeasonEntity bcs2SeasonEntity = seasonCrudRepository.save(createBcs2SeasonEntity());
+        SeasonEntity tbbt9SeasonEntity = seasonCrudRepository.save(createTbbt9SeasonEntity());
+
+
+        List<Long> results = underTest.getAllSeasonIds();
+
+
+        Assert.assertEquals(2, results.size());
+        Assert.assertTrue(results.contains(bcs2SeasonEntity.getId()));
+        Assert.assertTrue(results.contains(tbbt9SeasonEntity.getId()));
+    }
+
+    @Test
     public void testGetSeasonsPages() throws Exception {
         SeasonEntity bcs2SeasonEntity = seasonCrudRepository.save(createBcs2SeasonEntity());
         SeasonEntity tbbt9SeasonEntity = seasonCrudRepository.save(createTbbt9SeasonEntity());

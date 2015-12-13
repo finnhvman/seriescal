@@ -2,7 +2,7 @@ package com.finnhvman.seriescal.model;
 
 import java.util.Set;
 
-public class SeasonUpdate {
+public class SeasonNews {
 
     private Long id;
     private Set<Integer> newEpisodes;

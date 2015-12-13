@@ -19,7 +19,7 @@ public class EpisodesController {
         return episodeStoreService.getAllEpisodes(seasonId);
     }
 
-    @RequestMapping(value = "/{seasonId}/{episodeNumber}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{seasonId}/{episodeNumber}", method = RequestMethod.PATCH)
     public void markEpisode(@PathVariable Long seasonId, @PathVariable Integer episodeNumber, @RequestParam Boolean enqueued) {
         episodeStoreService.mark(seasonId, episodeNumber, enqueued);
     }

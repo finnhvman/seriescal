@@ -15,6 +15,7 @@ public interface SeasonStoreService {
     Season update(Long seasonId, SeasonSeed seasonSeed);
     void remove(Long seasonId);
 
+    List<Long> getAllSeasonIds();
     Set<String> getSeasonsPages(List<Long> seasonIds);
     List<Long> updateTouchedOfTouchedSeasonsFoundByPage(String page, Long touched);
     void updateSectionOfSeason(Long seasonId, Integer section);

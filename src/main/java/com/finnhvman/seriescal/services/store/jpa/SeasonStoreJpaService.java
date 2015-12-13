@@ -55,6 +55,13 @@ public class SeasonStoreJpaService implements SeasonStoreService {
     }
 
     @Override
+    public List<Long> getAllSeasonIds() {
+        return seasonCrudRepository.findAll().parallelStream()
+                .map(SeasonEntity::getId)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Set<String> getSeasonsPages(List<Long> seasonIds) {
         List<SeasonEntity> seasonEntities = seasonCrudRepository.findByIdIn(seasonIds);
         return seasonEntities.parallelStream()
