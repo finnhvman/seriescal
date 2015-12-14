@@ -45,6 +45,7 @@ public class EpisodeStoreJpaService implements EpisodeStoreService {
         episodeEntity.setSeasonId(seasonId);
         episodeEntity.setNumber(entry.getKey());
         episodeEntity.setDate(entry.getValue());
+        episodeEntity.setEnqueued(false);
         episodeCrudRepository.save(episodeEntity);
     }
 

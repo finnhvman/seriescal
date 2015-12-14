@@ -79,7 +79,7 @@ public class SeasonUpdatesWikiService implements SeasonUpdatesService {
             } catch (ParseException e) {
                 e.printStackTrace(); // TODO somehow note the fault, also catch unchecked exceptions?
             } finally {
-                collectorProgress = index / touchedSeasonIds.size() * 100;
+                collectorProgress = 100 * (index + 1) / touchedSeasonIds.size();
             }
         }
     }
