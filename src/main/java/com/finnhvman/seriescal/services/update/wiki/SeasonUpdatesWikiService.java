@@ -1,16 +1,21 @@
 package com.finnhvman.seriescal.services.update.wiki;
 
 import com.finnhvman.seriescal.model.SeasonNews;
-import com.finnhvman.seriescal.services.update.SeasonUpdatesService;
 import com.finnhvman.seriescal.services.store.EpisodeStoreService;
 import com.finnhvman.seriescal.services.store.SeasonStoreService;
 import com.finnhvman.seriescal.services.store.jpa.entities.SeasonEntity;
+import com.finnhvman.seriescal.services.update.SeasonUpdatesService;
 import com.finnhvman.seriescal.services.wiki.SeasonWikiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,8 +52,6 @@ public class SeasonUpdatesWikiService implements SeasonUpdatesService {
             // TODO should not do anything
         } catch (ParseException e) {
             // TODO somehow notify about the fault
-        } finally {
-            collectorProgress = 100;
         }
     }
 
@@ -61,20 +64,13 @@ public class SeasonUpdatesWikiService implements SeasonUpdatesService {
     }
 
     private void startCollectorThread(List<Long> touchedSeasonIds) throws InterruptedException {
-        if (collectorThread != null && collectorThread.isAlive()) {
-            collectorThread.interrupt();
-            collectorThread.join();
-        }
-        collectorThread = new Thread(() -> collectSeasonUpdates(touchedSeasonIds));
-        collectorThread.start();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> collectSeasonUpdates(touchedSeasonIds));
     }
 
     private void collectSeasonUpdates(List<Long> touchedSeasonIds) {
         for (int index = 0; index < touchedSeasonIds.size(); index++) {
             try {
-                if (Thread.interrupted()) {
-                    break;
-                }
                 collectSeasonUpdate(touchedSeasonIds.get(index));
             } catch (ParseException e) {
                 e.printStackTrace(); // TODO somehow note the fault, also catch unchecked exceptions?
